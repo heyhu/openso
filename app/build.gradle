@@ -16,6 +16,11 @@ android {
             cmake {
                 cppFlags ""
             }
+            // 现在基本32位
+            ndk {
+                abiFilters 'armeabi-v7a'
+            }
+
         }
     }
 
