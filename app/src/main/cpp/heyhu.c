@@ -3,8 +3,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <stdint.h>
 #include <android/log.h>
+#include "aes_utils.h"
+#include "tools.h"
+#include "junk.h"
+
+#define JNIREG_CLASS "com/goodl/aes/FooTools"
+#define NELEM(x) ((int) (sizeof(x) / sizeof((x)[0])))
 
 #define  TAG    "heyTag"
 
@@ -17,6 +22,7 @@
  *   hello-jni/app/src/main/java/com/example/hellojni/HelloJni.java
  */
 
+// md5算法
 const uint32_t k[64] = {
         0xd76aa478, 0xe8c7b756, 0x242070db, 0xc1bdceee,
         0xf57c0faf, 0x4787c62a, 0xa8304613, 0xfd469501,
@@ -208,7 +214,7 @@ Java_com_heyhu_openso_MainActivity_stringFromJNI(JNIEnv *env, jobject thiz) {
     char *final = (char *) malloc(16);
     memset(final, 0x00, sizeof(char) * 16);
 
-    for (i = 0; i < 16; i++){
+    for (i = 0; i < 16; i++) {
         sprintf(tmp, "%2.2x", result[i]);
         LOGI("now tmp is %s", tmp);
         sprintf(final, "%s%s", final, tmp);
@@ -218,4 +224,31 @@ Java_com_heyhu_openso_MainActivity_stringFromJNI(JNIEnv *env, jobject thiz) {
 
     return (*env)->NewStringUTF(env, "Hello from JNI !  Compiled with ABI " ABI ".");
     // return (*env)->NewStringUTF(env, final);
+}
+
+JNIEXPORT jstring JNICALL
+Java_com_heyhu_openso_MainActivity_method01(JNIEnv *env, jclass clazz, jstring str_) {
+    const char *str = (*env)->GetStringUTFChars(env, str_, JNI_FALSE);
+    char *result = AES_128_CBC_PKCS5_Encrypt(str);
+
+    (*env)->ReleaseStringUTFChars(env, str_, str);
+
+    jstring jResult = getJString(env, result);
+    free(result);
+
+    return jResult;
+}
+
+JNIEXPORT jstring JNICALL
+Java_com_heyhu_openso_MainActivity_method02(JNIEnv *env, jclass clazz, jstring str_) {
+
+    const char *str = (*env)->GetStringUTFChars(env, str_, JNI_FALSE);
+    char *result = AES_128_CBC_PKCS5_Decrypt(str);
+
+    (*env)->ReleaseStringUTFChars(env, str_, str);
+
+    jstring jResult = getJString(env, result);
+    free(result);
+
+    return jResult;
 }

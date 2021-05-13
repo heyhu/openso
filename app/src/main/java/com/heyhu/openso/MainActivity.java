@@ -20,6 +20,7 @@ public class MainActivity extends AppCompatActivity {
         // Example of a call to a native method
         TextView tv = findViewById(R.id.sample_text);
         tv.setText(stringFromJNI());
+        tv.setText(method02(method01("heyhu")));
     }
 
     /**
@@ -27,4 +28,14 @@ public class MainActivity extends AppCompatActivity {
      * which is packaged with this application.
      */
     public native String stringFromJNI();
+
+    /**
+     * AES加密, CBC, PKCS5Padding
+     */
+    public static native String method01(String str);
+
+    /**
+     * AES解密, CBC, PKCS5Padding
+     */
+    public static native String method02(String str);
 }

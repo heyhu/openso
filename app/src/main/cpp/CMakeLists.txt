@@ -18,6 +18,14 @@ add_library( # Sets the name of the library.
              SHARED
 
              # Provides a relative path to your source file(s).
+             aes.h
+             aes.c
+             hex_utils.h
+             hex_utils.c
+             tools.h
+             tools.cpp
+             aes_utils.h
+             aes_utils.c
              heyhu.c )
 
 # Searches for a specified prebuilt library and stores the path as a
